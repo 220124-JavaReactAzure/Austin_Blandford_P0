@@ -82,6 +82,17 @@ public class Customer {
 		this.accountId = accountId;
 	}
 	
+	public String toFileString() {
+		StringBuilder buildFileString = new StringBuilder();
+		
+		buildFileString.append(firstName).append(":")
+					   .append(lastName).append(":")
+					   .append(email).append(":")
+					   .append(password).append(":");
+		
+		return buildFileString.toString();
+	}
+	
 	@Override
 	public String toString() {
 		return "Customer [Customer Id: " + customerId + ", First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + ", Account Id: " + accountId + "]";

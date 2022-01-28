@@ -1,6 +1,8 @@
 package com.revature.bank_app;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -29,7 +31,20 @@ public class BankDriver {
 		
 		Customer customer = new Customer(firstName, lastName, email, password);
 		System.out.println("The information you entered is below.");
-		System.out.print(customer.toString());
+		System.out.println(customer.toString());
+		
+		System.out.println("Adding information to customers.txt...");
+		
+		File customersFile = new File("resources/customers.txt");
+		
+		try(FileWriter fileWriter = new FileWriter(customersFile, true)) {
+			fileWriter.write(customer.toFileString() + "\n");
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error persisting user information.");
+		}
+		
+		System.out.println("Your account has been added. Please login with your information now.");
 	}
 
 }

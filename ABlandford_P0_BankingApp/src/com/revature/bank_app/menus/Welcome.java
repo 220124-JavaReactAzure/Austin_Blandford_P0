@@ -20,7 +20,7 @@ public class Welcome extends Menu {
 		
 		switch(selection) {
 		case("1"):
-			System.out.println("You will be directed to the login page.");
+			router.transfer("/login");
 			break;
 		case("2"):
 			router.transfer("/register");

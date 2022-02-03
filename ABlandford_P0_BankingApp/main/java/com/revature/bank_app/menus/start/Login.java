@@ -1,7 +1,8 @@
-package com.revature.bank_app.menus;
+package com.revature.bank_app.menus.start;
 
 import java.io.BufferedReader;
 
+import com.revature.bank_app.menus.Menu;
 import com.revature.bank_app.services.CustomerService;
 import com.revature.bank_app.util.MenuRouter;
 

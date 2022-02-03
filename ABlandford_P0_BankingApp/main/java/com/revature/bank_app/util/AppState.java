@@ -3,9 +3,9 @@ package com.revature.bank_app.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.revature.bank_app.menus.Login;
-import com.revature.bank_app.menus.Register;
-import com.revature.bank_app.menus.Welcome;
+import com.revature.bank_app.menus.start.Login;
+import com.revature.bank_app.menus.start.Register;
+import com.revature.bank_app.menus.start.Welcome;
 import com.revature.bank_app.services.CustomerService;
 
 public class AppState {

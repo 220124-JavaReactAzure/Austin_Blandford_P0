@@ -4,6 +4,8 @@ import com.revature.bank_app.models.Customer;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.revature.bank_app.exceptions.InvalidRequestException;
 
@@ -24,6 +26,12 @@ public class CustomerService {
 		}
 		
 		System.out.println("Your account has been added. Please login with your information now.");
+		
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		
+		DateTimeFormatter formatDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		System.out.println("The current time is this: " + currentDateTime.format(formatDateTime));
 		
 		return true;
 	}

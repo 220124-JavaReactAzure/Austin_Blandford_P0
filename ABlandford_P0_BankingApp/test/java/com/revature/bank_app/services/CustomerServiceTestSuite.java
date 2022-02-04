@@ -4,11 +4,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.revature.bank_app.daos.CustomerDAO;
 import com.revature.bank_app.models.Customer;
 
 public class CustomerServiceTestSuite {
 
 	CustomerService sut;
+	CustomerDAO mockCustomerDAO;
 	
 	@Before
 	public void testPrep() {

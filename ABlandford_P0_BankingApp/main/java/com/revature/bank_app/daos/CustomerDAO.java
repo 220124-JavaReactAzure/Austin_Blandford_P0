@@ -19,7 +19,7 @@ public class CustomerDAO implements CrudDAO<Customer> {
 
 		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
 			
-			String sql = "select * from customers where email = ? and password = ?";
+			String sql = "select * from customers where email = ? and customer_password = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, email);
 			ps.setString(2, password);

@@ -3,9 +3,12 @@ package com.revature.bank_app.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import com.revature.bank_app.daos.CustomerDAO;
+import com.revature.bank_app.menus.dashboardMenus.Dashboard;
 import com.revature.bank_app.menus.start.Login;
 import com.revature.bank_app.menus.start.Register;
 import com.revature.bank_app.menus.start.Welcome;
+import com.revature.bank_app.services.AccountService;
 import com.revature.bank_app.services.CustomerService;
 import com.revature.bank_app.util.logger.Logger;
 
@@ -24,10 +27,13 @@ public class AppState {
 		router = new MenuRouter();
 		BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 		
-		CustomerService customerService = new CustomerService();
+		CustomerDAO customerDao = new CustomerDAO();
+		AccountService accountService = new AccountService();
+		CustomerService customerService = new CustomerService(customerDao, accountService);
 		router.addMenu(new Welcome(consoleReader, router));
 		router.addMenu(new Register(consoleReader, router, customerService));
 		router.addMenu(new Login(consoleReader, router, customerService));
+		router.addMenu(new Dashboard(consoleReader, router, customerService));
 		
 		logger.log("Application initialized! Redirecting to the main menu.");
 	}

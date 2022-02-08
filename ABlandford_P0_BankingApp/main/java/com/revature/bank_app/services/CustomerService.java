@@ -37,7 +37,7 @@ public class CustomerService {
 		boolean emailAvailable = customerDao.findByEmail(newCustomer.getEmail()) == null;
 		
 		if(!emailAvailable) {
-			throw new ResourcePersistenceException("This email already exists in our database. Please either login with this email, change your password, or register with a different email.\n");
+			throw new ResourcePersistenceException("The provided email already exists in our database.\n");
 		}
 		
 		Account newAccount = accountService.createNewAccount();
@@ -81,6 +81,14 @@ public class CustomerService {
 		if(newCustomer.getLastName() == null || newCustomer.getLastName().trim().equals("")) return false;
 		if(newCustomer.getEmail() == null || newCustomer.getEmail().trim().equals("") || !emailMatcher.find()) return false;
 		return newCustomer.getPassword() != null || !newCustomer.getPassword().trim().equals("");
+	}
+	
+	public void logout() {
+		sessionCustomer = null;
+	}
+	
+	public boolean isSessionActive() {
+		return sessionCustomer != null;
 	}
 	
 }

@@ -10,11 +10,14 @@ import com.revature.bank_app.models.Customer;
 public class CustomerServiceTestSuite {
 
 	CustomerService sut;
-	CustomerDAO mockCustomerDAO;
+	CustomerDAO customerDAO;
+	AccountService accountService;
 	
 	@Before
 	public void testPrep() {
-		sut = new CustomerService();
+		customerDAO = new CustomerDAO();
+		accountService = new AccountService();
+		sut = new CustomerService(customerDAO, accountService);
 	}
 	
 	@Test

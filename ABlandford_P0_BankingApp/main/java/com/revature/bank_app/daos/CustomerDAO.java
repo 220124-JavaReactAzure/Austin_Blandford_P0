@@ -18,15 +18,15 @@ public class CustomerDAO implements CrudDAO<Customer> {
 	@Override
 	public Customer create(Customer newObject) {
 		// TODO Auto-generated method stub
-		System.out.println("Information to submit:\n" + newObject.toString() + "\n");
+		System.out.println("Information to submit:\n\n" + newObject.toString() + "\n");
 
 		System.out.println("Your account has been added. Please login with your information now.");
 
-		LocalDateTime currentDateTime = LocalDateTime.now();
-
-		DateTimeFormatter formatDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-		System.out.println("The current date and time is: " + currentDateTime.format(formatDateTime));
+//		LocalDateTime currentDateTime = LocalDateTime.now();
+//
+//		DateTimeFormatter formatDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//
+//		System.out.println("The current date and time is: " + currentDateTime.format(formatDateTime));
 
 		return null;
 	}

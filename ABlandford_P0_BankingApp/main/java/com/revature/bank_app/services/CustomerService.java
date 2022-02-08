@@ -26,26 +26,18 @@ public class CustomerService {
 		return true;
 	}
 	
+	@SuppressWarnings("unused")
 	public boolean isCustomerValid(Customer newCustomer) {
 		
-//		String pattern = "^(.+)@(.+)$";
-//		
-//		Pattern patternCompiler = Pattern.compile(pattern);
-//		
-//		Matcher matcher = patternCompiler.matcher(newCustomer.getEmail());
-//		
-//		if(matcher.find()) {
-//			System.out.println("The email entered is valid.");
-//		} else {
-//			System.out.println("That email is not valid. Please try again.");
-//		}
-//		
-//		return true;
+		System.out.println("Validating your input...");
+		
+		Pattern emailPatternCompiler = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+		Matcher emailMatcher = emailPatternCompiler.matcher(newCustomer.getEmail());
 		
 		if(newCustomer == null) return false;
 		if(newCustomer.getFirstName() == null || newCustomer.getFirstName().trim().equals("")) return false;
 		if(newCustomer.getLastName() == null || newCustomer.getLastName().trim().equals("")) return false;
-		if(newCustomer.getEmail() == null || newCustomer.getEmail().trim().equals("")) return false;
+		if(newCustomer.getEmail() == null || newCustomer.getEmail().trim().equals("") || !emailMatcher.find()) return false;
 		return newCustomer.getPassword() != null || !newCustomer.getPassword().trim().equals("");
 	}
 	

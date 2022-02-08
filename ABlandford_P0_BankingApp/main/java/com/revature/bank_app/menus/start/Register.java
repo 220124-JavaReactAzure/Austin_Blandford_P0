@@ -38,8 +38,6 @@ public class Register extends Menu {
 		System.out.println("The information you entered is below.");
 		System.out.println(newCustomer.toString());
 		
-		System.out.println("Adding information to customers.txt...");
-		
 		try {
 			customerService.registerNewCustomer(newCustomer);
 		} catch(InvalidRequestException e) {

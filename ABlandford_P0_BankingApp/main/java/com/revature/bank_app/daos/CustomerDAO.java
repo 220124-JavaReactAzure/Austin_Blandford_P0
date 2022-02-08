@@ -1,5 +1,8 @@
 package com.revature.bank_app.daos;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.UUID;
 
 //import java.time.LocalDateTime;
@@ -7,6 +10,7 @@ import java.util.UUID;
 
 import com.revature.bank_app.models.Customer;
 import com.revature.bank_app.util.List;
+import com.revature.bank_app.util.datasource.ConnectionFactory;
 
 public class CustomerDAO implements CrudDAO<Customer> {
 
@@ -19,12 +23,36 @@ public class CustomerDAO implements CrudDAO<Customer> {
 
 	@Override
 	public Customer create(Customer newCustomer) {
-		// TODO Auto-generated method stub
-		newCustomer.setCustomerId(UUID.randomUUID().toString());
 		
-		System.out.println("Information to submit:\n\n" + newCustomer.toStringWithIds() + "\n");
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			
+			newCustomer.setCustomerId(UUID.randomUUID().toString());
 
-		System.out.println("Your account has been added. Please login with your information now.");
+			System.out.println("Information to submit:\n\n" + newCustomer.toStringWithIds() + "\n");
+			
+			String sql = "insert into customers (customer_id, customer_name, email, customer_password, account_id) values (?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			String fullName = newCustomer.getFirstName() + " " + newCustomer.getLastName();
+			
+			ps.setString(1, newCustomer.getCustomerId());
+			ps.setString(2, fullName);
+			ps.setString(3, newCustomer.getEmail());
+			ps.setString(4, newCustomer.getPassword());
+			ps.setString(5, newCustomer.getAccountId());
+			
+			int rowsInserted = ps.executeUpdate();
+			
+			if(rowsInserted != 0) {
+				System.out.println("Your account has been added. Please login with your information now.");
+				return newCustomer;
+			}
+
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 
 //		LocalDateTime currentDateTime = LocalDateTime.now();
 //

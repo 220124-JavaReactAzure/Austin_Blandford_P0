@@ -2,10 +2,8 @@ package com.revature.bank_app.services;
 
 import com.revature.bank_app.models.Customer;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDateTime;
+//import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,14 +12,20 @@ import com.revature.bank_app.exceptions.InvalidRequestException;
 
 public class CustomerService {
 	
-	private CustomerDAO customerDAO = new CustomerDAO();
+	private CustomerDAO customerDao = new CustomerDAO();
+	private AccountService accountService = new AccountService();
 
 	public boolean registerNewCustomer(Customer newCustomer) {
 		if(!isCustomerValid(newCustomer)) {
 			throw new InvalidRequestException("Invalid user data provided!");
 		}
 		
-		customerDAO.create(newCustomer);
+		if(accountService.createNewAccount()) {
+			customerDao.create(newCustomer);			
+		} else {
+			System.out.println("Account registration failed. Please try again.");
+			return false;
+		}
 		
 		return true;
 	}

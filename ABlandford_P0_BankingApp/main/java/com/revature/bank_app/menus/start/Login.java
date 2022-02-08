@@ -2,6 +2,7 @@ package com.revature.bank_app.menus.start;
 
 import java.io.BufferedReader;
 
+import com.revature.bank_app.exceptions.AuthenticationException;
 import com.revature.bank_app.menus.Menu;
 import com.revature.bank_app.services.CustomerService;
 import com.revature.bank_app.util.MenuRouter;
@@ -25,9 +26,13 @@ public class Login extends Menu {
 		System.out.print("Password: ");
 		String password = consoleReader.readLine();
 		
-		String userInput = "Submitted Email: " + email + "\nSubmitted Password: " + password;
+		try {
+			customerService.authenticateCustomer(email, password);
+			router.transfer("/dashboard");
+		} catch(AuthenticationException e) {
+			System.out.println("Your credentials are invalid. You can change your password, register a new account, or try again.");
+		}
 		
-		System.out.println(userInput);
 	}
 
 }

@@ -9,16 +9,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.revature.bank_app.daos.CustomerDAO;
+import com.revature.bank_app.exceptions.AuthenticationException;
 import com.revature.bank_app.exceptions.InvalidRequestException;
+import com.revature.bank_app.exceptions.ResourcePersistenceException;
 
 public class CustomerService {
 	
-	private CustomerDAO customerDao = new CustomerDAO();
-	private AccountService accountService = new AccountService();
+	private final CustomerDAO customerDao;
+	private final AccountService accountService;
+	private Customer sessionCustomer;
+	
+	public CustomerService(CustomerDAO customerDao, AccountService accountService) {
+		this.customerDao = customerDao;
+		this.accountService = accountService;
+		this.sessionCustomer = null;
+	}
+	
+	public Customer getSessionCustomer() {
+		return sessionCustomer;
+	}
 
 	public boolean registerNewCustomer(Customer newCustomer) {
 		if(!isCustomerValid(newCustomer)) {
 			throw new InvalidRequestException("Invalid user data provided!");
+		}
+		
+		boolean emailAvailable = customerDao.findByEmail(newCustomer.getEmail()) == null;
+		
+		if(!emailAvailable) {
+			throw new ResourcePersistenceException("This email already exists in our database. Please either login with this email, change your password, or register with a different email.\n");
 		}
 		
 		Account newAccount = accountService.createNewAccount();
@@ -32,6 +51,21 @@ public class CustomerService {
 		}
 		
 		return true;
+	}
+	
+	public void authenticateCustomer(String email, String password) {
+		
+		if(email == null || email.trim().equals("") || password == null || password.trim().equals("")) {
+			throw new InvalidRequestException("The input you gave is invalid. Please try again.");
+		}
+		
+		Customer authenticatedCustomer = customerDao.findByEmailAndPassword(email, password);
+		
+		if(authenticatedCustomer == null) {
+			throw new AuthenticationException("Unauthenticated user. Provided information was not found in our database.");
+		}
+		
+		sessionCustomer = authenticatedCustomer;
 	}
 	
 	@SuppressWarnings("unused")

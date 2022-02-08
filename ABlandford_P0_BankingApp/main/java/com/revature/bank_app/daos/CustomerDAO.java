@@ -2,6 +2,7 @@ package com.revature.bank_app.daos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -14,10 +15,59 @@ import com.revature.bank_app.util.datasource.ConnectionFactory;
 
 public class CustomerDAO implements CrudDAO<Customer> {
 
-	public Customer findByUsernameAndPassword(String username, String password) {
+	public Customer findByEmailAndPassword(String email, String password) {
 
-		System.out.println("The information to use to find the user\nUsername: " + username + "\nPassword: " + password);
+		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			
+			String sql = "select * from customers where email = ? and password = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, email);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerId(rs.getString("customer_id"));
+				customer.setFirstName(rs.getString("first_name"));
+				customer.setLastName(rs.getString("last_name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPassword(rs.getString("customer_password"));
+				customer.setAccountId(rs.getString("account_id"));
+				
+				return customer;
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 
+		return null;
+	}
+	
+	public Customer findByEmail(String email) {
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			String sql = "select * from customers where email = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerId(rs.getString("customer_id"));
+				customer.setFirstName(rs.getString("first_name"));
+				customer.setLastName(rs.getString("last_name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPassword(rs.getString("customer_password"));
+				customer.setAccountId(rs.getString("account_id"));
+				
+				return customer;
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 
@@ -30,17 +80,16 @@ public class CustomerDAO implements CrudDAO<Customer> {
 
 			System.out.println("Information to submit:\n\n" + newCustomer.toStringWithIds() + "\n");
 			
-			String sql = "insert into customers (customer_id, customer_name, email, customer_password, account_id) values (?, ?, ?, ?, ?)";
+			String sql = "insert into customers (customer_id, first_name, last_name, email, customer_password, account_id) values (?, ?, ?, ?, ?, ?)";
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
-			String fullName = newCustomer.getFirstName() + " " + newCustomer.getLastName();
-			
 			ps.setString(1, newCustomer.getCustomerId());
-			ps.setString(2, fullName);
-			ps.setString(3, newCustomer.getEmail());
-			ps.setString(4, newCustomer.getPassword());
-			ps.setString(5, newCustomer.getAccountId());
+			ps.setString(2, newCustomer.getFirstName());
+			ps.setString(3, newCustomer.getLastName());
+			ps.setString(4, newCustomer.getEmail());
+			ps.setString(5, newCustomer.getPassword());
+			ps.setString(6, newCustomer.getAccountId());
 			
 			int rowsInserted = ps.executeUpdate();
 			

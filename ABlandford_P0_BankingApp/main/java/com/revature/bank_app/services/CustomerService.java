@@ -1,5 +1,6 @@
 package com.revature.bank_app.services;
 
+import com.revature.bank_app.models.Account;
 import com.revature.bank_app.models.Customer;
 
 //import java.time.LocalDateTime;
@@ -20,8 +21,11 @@ public class CustomerService {
 			throw new InvalidRequestException("Invalid user data provided!");
 		}
 		
-		if(accountService.createNewAccount()) {
-			customerDao.create(newCustomer);			
+		Account newAccount = accountService.createNewAccount();
+		
+		if(newAccount != null) {
+			newCustomer.setAccountId(newAccount.getAccountId());
+			customerDao.create(newCustomer);
 		} else {
 			System.out.println("Account registration failed. Please try again.");
 			return false;

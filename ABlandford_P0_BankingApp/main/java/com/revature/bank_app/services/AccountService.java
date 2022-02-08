@@ -11,15 +11,13 @@ public class AccountService {
 	private Account newAccount;
 	private double defaultBalance = 0.00; 
 
-	public boolean createNewAccount() {
+	public Account createNewAccount() {
 		
 		String newAccountId = UUID.randomUUID().toString();
 		
 		newAccount = new Account(newAccountId, defaultBalance);
 		
-		accountDao.create(newAccount);
-		
-		return true;
+		return accountDao.create(newAccount);
 	}
 
 }

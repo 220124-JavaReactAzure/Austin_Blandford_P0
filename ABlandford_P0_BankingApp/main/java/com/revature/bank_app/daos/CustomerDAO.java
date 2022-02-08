@@ -1,5 +1,7 @@
 package com.revature.bank_app.daos;
 
+import java.util.UUID;
+
 //import java.time.LocalDateTime;
 //import java.time.format.DateTimeFormatter;
 
@@ -16,9 +18,11 @@ public class CustomerDAO implements CrudDAO<Customer> {
 	}
 
 	@Override
-	public Customer create(Customer newObject) {
+	public Customer create(Customer newCustomer) {
 		// TODO Auto-generated method stub
-		System.out.println("Information to submit:\n\n" + newObject.toString() + "\n");
+		newCustomer.setCustomerId(UUID.randomUUID().toString());
+		
+		System.out.println("Information to submit:\n\n" + newCustomer.toStringWithIds() + "\n");
 
 		System.out.println("Your account has been added. Please login with your information now.");
 

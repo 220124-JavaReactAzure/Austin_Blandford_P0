@@ -93,9 +93,13 @@ public class Customer {
 		return buildFileString.toString();
 	}
 	
+	public String toStringWithIds() {
+		return "Customer [Customer ID: " + customerId + ", First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + ", Account ID: " + accountId +"]";
+	}
+	
 	@Override
 	public String toString() {
-		return "Customer [Customer Id: " + customerId + ", First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + ", Account Id: " + accountId + "]";
+		return "Customer [First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + "]";
 	}
 	
 }

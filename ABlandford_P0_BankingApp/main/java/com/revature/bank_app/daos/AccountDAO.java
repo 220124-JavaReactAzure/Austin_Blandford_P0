@@ -13,7 +13,7 @@ public class AccountDAO implements CrudDAO<Account> {
 			System.out.println("New account id: " + newAccount.getAccountId());
 		}
 		
-		return null;
+		return newAccount;
 	}
 
 	@Override

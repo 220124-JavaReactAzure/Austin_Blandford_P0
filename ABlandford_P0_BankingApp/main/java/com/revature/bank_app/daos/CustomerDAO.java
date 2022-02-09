@@ -10,6 +10,7 @@ import java.util.UUID;
 //import java.time.format.DateTimeFormatter;
 
 import com.revature.bank_app.models.Customer;
+import com.revature.bank_app.services.AccountService;
 import com.revature.bank_app.util.List;
 import com.revature.bank_app.util.datasource.ConnectionFactory;
 
@@ -95,6 +96,32 @@ public class CustomerDAO implements CrudDAO<Customer> {
 		}
 		
 		return null;
+	}
+	
+	public boolean delete(String customerId, String accountId) {
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			
+			String sql = "delete from customers where customer_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, customerId);
+			
+			int rowsDeleted = ps.executeUpdate();
+			
+			if(rowsDeleted != 0) {
+				AccountService accountService = new AccountService();
+				if(accountService.deleteById(accountId)) {
+					return true;
+				}
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	@Override

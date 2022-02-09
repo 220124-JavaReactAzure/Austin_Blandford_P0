@@ -116,6 +116,21 @@ public class CustomerService {
 		sessionCustomer = authenticatedCustomer;
 	}
 	
+	public void deleteUser(Customer customerToDelete) {
+		
+		if(customerToDelete == null) {
+			throw new InvalidRequestException("User submission doesn't exist. Please try again.");
+		}
+		
+		System.out.println("Deleting user profile and associated account...");
+		
+		if(customerDao.delete(customerToDelete.getCustomerId(), customerToDelete.getAccountId())) {
+			System.out.println("User profile and account successfully deleted. Returning to welcome menu...");
+			logout();
+		}
+		
+	}
+	
 	@SuppressWarnings("unused")
 	public boolean isCustomerValid(Customer newCustomer) {
 		

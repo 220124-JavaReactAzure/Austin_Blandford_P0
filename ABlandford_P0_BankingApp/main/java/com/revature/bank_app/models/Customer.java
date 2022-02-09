@@ -97,6 +97,10 @@ public class Customer {
 		return "Customer [Customer ID: " + customerId + ", First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + ", Account ID: " + accountId +"]";
 	}
 	
+	public String toStringUserReadable() {
+		return "Here is your information\n\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nEmail: " + email;
+	}
+	
 	@Override
 	public String toString() {
 		return "Customer [First Name: " + firstName + ", Last Name: " + lastName + ", Email: " + email + ", Password: " + password + "]";

@@ -41,14 +41,14 @@ public class Dashboard extends Menu {
 			switch(userSelection) {
 			case("1"):
 				System.out.println("Redirecting to your profile information...");
-				router.transfer("/profileInformation");
+				router.transfer("/profile-information");
 				break;
 			case("2"):
 				System.out.println("Redirecting to your account balance...");
-				router.transfer("/accountBalance");
+				router.transfer("/account-balance");
 				break;
 			case("3"):
-				router.transfer("/deleteAccount");
+				router.transfer("/delete-account");
 				break;
 			case("4"):
 				customerService.logout();

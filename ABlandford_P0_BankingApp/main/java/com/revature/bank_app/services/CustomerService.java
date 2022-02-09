@@ -53,6 +53,54 @@ public class CustomerService {
 		return true;
 	}
 	
+	public Customer updateFirstName(Customer customerToUpdate, String newFirstName) {
+		
+		if(newFirstName == null) {
+			throw new InvalidRequestException("You did not provide a valid first name. Please try again.");
+		}
+		
+		customerToUpdate.setFirstName(newFirstName);
+		
+		if(update(customerToUpdate)) {
+			sessionCustomer = customerToUpdate;
+			return sessionCustomer;
+		}
+		
+		return null;
+	}
+	
+	public Customer updateLastName(Customer customerToUpdate, String newLastName) {
+		
+		if(newLastName == null) {
+			throw new InvalidRequestException("You did not provide a valid first name. Please try again.");
+		}
+		
+		customerToUpdate.setLastName(newLastName);
+		
+		if(update(customerToUpdate)) {
+			sessionCustomer = customerToUpdate;
+			return sessionCustomer;
+		}
+		
+		return null;
+	}
+	
+	public Customer updateEmail(Customer customerToUpdate, String newEmail) {
+		
+		if(!isEmailValid(newEmail)) {
+			throw new InvalidRequestException("You did not provide a valid email. Please try again.");
+		}
+		
+		customerToUpdate.setEmail(newEmail);
+		
+		if(update(customerToUpdate)) {
+			sessionCustomer = customerToUpdate;
+			return sessionCustomer;
+		}
+		
+		return null;
+	}
+	
 	public void authenticateCustomer(String email, String password) {
 		
 		if(email == null || email.trim().equals("") || password == null || password.trim().equals("")) {
@@ -81,6 +129,19 @@ public class CustomerService {
 		if(newCustomer.getLastName() == null || newCustomer.getLastName().trim().equals("")) return false;
 		if(newCustomer.getEmail() == null || newCustomer.getEmail().trim().equals("") || !emailMatcher.find()) return false;
 		return newCustomer.getPassword() != null || !newCustomer.getPassword().trim().equals("");
+	}
+	
+	@SuppressWarnings("null")
+	public boolean isEmailValid(String email) {
+		
+		Pattern emailPatternCompiler = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+		Matcher emailMatcher = emailPatternCompiler.matcher(email);
+		
+		return email != null || !email.trim().equals("") || !emailMatcher.find();
+	}
+	
+	public boolean update(Customer updatedCustomer) {
+		return customerDao.update(updatedCustomer);
 	}
 	
 	public void logout() {

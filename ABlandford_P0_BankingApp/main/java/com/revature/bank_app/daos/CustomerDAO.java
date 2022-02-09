@@ -70,6 +70,32 @@ public class CustomerDAO implements CrudDAO<Customer> {
 		
 		return null;
 	}
+	
+	public Customer findByCustomerId(String customerId) {
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			String sql = "select * from customers where customer_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, customerId);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Customer customer = new Customer();
+				customer.setCustomerId(rs.getString("customer_id"));
+				customer.setFirstName(rs.getString("first_name"));
+				customer.setLastName(rs.getString("last_name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPassword(rs.getString("customer_password"));
+				customer.setAccountId(rs.getString("account_id"));
+				
+				return customer;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	@Override
 	public Customer create(Customer newCustomer) {
@@ -125,8 +151,32 @@ public class CustomerDAO implements CrudDAO<Customer> {
 	}
 
 	@Override
-	public boolean update(Customer updatedObject) {
-		// TODO Auto-generated method stub
+	public boolean update(Customer updatedCustomer) {
+		
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			
+			System.out.println("Updating customer information...");
+			
+			String sql = "update customers set first_name = ?, last_name = ?, email = ? where customer_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, updatedCustomer.getFirstName());
+			ps.setString(2, updatedCustomer.getLastName());
+			ps.setString(3, updatedCustomer.getEmail());
+			ps.setString(4, updatedCustomer.getCustomerId());
+			
+			int rowsUpdated = ps.executeUpdate();
+			
+			if(rowsUpdated != 0) {
+				System.out.println("Success! Your profile has been updated.");
+				return true;
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 

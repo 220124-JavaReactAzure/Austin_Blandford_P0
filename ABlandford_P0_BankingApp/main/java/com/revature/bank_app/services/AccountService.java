@@ -21,6 +21,15 @@ public class AccountService {
 		return accountDao.create(newAccount);
 	}
 	
+	public double retrieveBalance(String accountId) {
+		
+		if(accountId == null || accountId.trim().equals("")) {
+			throw new InvalidRequestException("The account provided doesn't exist. Please try again.");
+		}
+		
+		return accountDao.getBalance(accountId);
+	}
+	
 	public boolean deleteById(String accountId) {
 		
 		if(accountId == null || accountId.trim().equals("")) {

@@ -5,6 +5,10 @@ public class Account {
 	private String accountId;
 	private double balance;
 	
+	public Account() {
+		super();
+	}
+	
 	public Account(String accountId, double balance) {
 		super();
 		this.accountId = accountId;

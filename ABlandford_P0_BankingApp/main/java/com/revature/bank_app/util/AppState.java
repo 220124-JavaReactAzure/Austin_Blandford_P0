@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.revature.bank_app.daos.CustomerDAO;
+import com.revature.bank_app.menus.dashboardMenus.AccountBalance;
 import com.revature.bank_app.menus.dashboardMenus.Dashboard;
 import com.revature.bank_app.menus.dashboardMenus.DeleteUser;
 import com.revature.bank_app.menus.dashboardMenus.ProfileInfo;
@@ -38,6 +39,7 @@ public class AppState {
 		router.addMenu(new Dashboard(consoleReader, router, customerService));
 		router.addMenu(new ProfileInfo(consoleReader, router, customerService));
 		router.addMenu(new DeleteUser(consoleReader, router, customerService));
+		router.addMenu(new AccountBalance(consoleReader, router, customerService, accountService));
 		
 		logger.log("Application initialized! Redirecting to the main menu.");
 	}

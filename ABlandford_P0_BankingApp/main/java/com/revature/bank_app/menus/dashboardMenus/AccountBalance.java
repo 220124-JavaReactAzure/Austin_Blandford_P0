@@ -28,12 +28,40 @@ public class AccountBalance extends Menu {
 		
 		System.out.println("Your available balance: " + availableBalance + "\n");
 		
-		System.out.println("1) Return to dashboard");
+		String menu = "What would you like to do?\n"
+					+ "1) Deposit Money\n"
+					+ "2) Withdraw Money\n"
+					+ "3) Return to dashboard\n";
+		
+		System.out.println(menu);
 		
 		String userSelection = consoleReader.readLine();
+		String depositInput;
 		
 		switch(userSelection) {
 		case("1"):
+			System.out.print("Please enter the amount you would like to deposit: ");
+			depositInput = consoleReader.readLine();
+			double amountToDeposit = Double.parseDouble(depositInput);
+			if(accountService.deposit(sessionCustomer.getAccountId(), availableBalance, amountToDeposit)) {
+				router.transfer("/dashboard");
+				break;
+			}
+			System.out.println("Your transaction has failed. Please try again.");
+			router.transfer("/account-balance");
+			break;
+		case("2"):
+			System.out.print("Please enter the amount you would like to withdraw: ");
+			depositInput = consoleReader.readLine();
+			double amountToWithdraw = Double.parseDouble(depositInput);
+			if(accountService.withdraw(sessionCustomer.getAccountId(), availableBalance, amountToWithdraw)) {				
+				router.transfer("/dashboard");
+				break;
+			}
+			System.out.println("Your transaction has failed. Please try again.");
+			router.transfer("/account-balance");
+			break;
+		case("3"):
 			router.transfer("/dashboard");
 			break;
 		default:

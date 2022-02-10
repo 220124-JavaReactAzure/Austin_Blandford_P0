@@ -23,7 +23,7 @@ public class AccountService {
 	
 	public double retrieveBalance(String accountId) {
 		
-		if(accountId == null || accountId.trim().equals("")) {
+		if(!validateAccount(accountId)) {
 			throw new InvalidRequestException("The account provided doesn't exist. Please try again.");
 		}
 		
@@ -32,11 +32,62 @@ public class AccountService {
 	
 	public boolean deleteById(String accountId) {
 		
-		if(accountId == null || accountId.trim().equals("")) {
+		if(!validateAccount(accountId)) {
 			throw new InvalidRequestException("The account provided doesn't exist. Please try again.");
 		}
 		
 		return accountDao.delete(accountId);
+	}
+	
+	public boolean deposit(String accountId, double balance, double amountToDeposit) {
+		if(!validateAccount(accountId)) {
+			System.out.println("The account provided doesn't exist. Please try again.");
+			return false;
+		} else if(!validateMoney(amountToDeposit)) {
+			System.out.println("You tried to deposit a negative amount of money or no money. Please try again with a value above 0.");
+			return false;
+		}
+		
+		amountToDeposit = balance + amountToDeposit;
+		
+		return accountDao.updateBalance(accountId, amountToDeposit);
+	}
+	
+	public boolean withdraw(String accountId, double balance, double amountToWithdraw) {
+		if(!validateAccount(accountId)) {
+			System.out.println("The account provided doesn't exist. Please try again.");
+			return false;
+		} else if(!validateMoney(amountToWithdraw)) {
+			System.out.println("You tried to withdraw a negative amount of money or no money. Please try again with a value above 0.");
+			return false;
+		} else if(!validateBalance(balance)) {
+			System.out.println("Your balance is currently at 0. Please deposit money before you may make a withdrawal.");
+			return false;
+		} else if(!validateWithdrawal(balance, amountToWithdraw)) {
+			System.out.println("You are trying to withdraw more than you have in your account. Please try again.");
+			return false;
+		}
+		
+		amountToWithdraw = balance - amountToWithdraw;
+		
+		return accountDao.updateBalance(accountId, amountToWithdraw);
+	}
+	
+	@SuppressWarnings("null")
+	public boolean validateAccount(String accountId) {
+		return accountId != null || !accountId.trim().equals("");
+	}
+	
+	public boolean validateMoney(double money) {
+		return money > 0;
+	}
+	
+	public boolean validateBalance(double balance) {
+		return balance > 0;
+	}
+	
+	public boolean validateWithdrawal(double balance, double amountToWithdraw) {
+		return amountToWithdraw <= balance;
 	}
 
 }

@@ -12,55 +12,80 @@ import com.revature.bank_app.util.datasource.ConnectionFactory;
 public class AccountDAO implements CrudDAO<Account> {
 
 	public double getBalance(String accountId) {
-		
-		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
-			
+
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
 			String sql = "select * from accounts where account_id = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, accountId);
 			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Account account = new Account();
 				account.setBalance(rs.getDouble("available_balance"));
-				
+
 				return account.getBalance();
 			}
-			
-		} catch(SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return -1;
 	}
-	
+
+	public boolean updateBalance(String accountId, double amountToDeposit) {
+
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+			
+			String sql = "update accounts set available_balance = ? where account_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setDouble(1, amountToDeposit);
+			ps.setString(2, accountId);
+			
+			int rowsUpdated = ps.executeUpdate();
+			
+			if(rowsUpdated != 0) {
+				System.out.println("Success! The user's balance has been updated.");
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
 	@Override
 	public Account create(Account newAccount) {
-		
-		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
-			
-			if(newAccount != null) {
+
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
+			if (newAccount != null) {
 				System.out.println("Creating new account for the user now...");
-				
+
 				String sql = "insert into accounts (account_id, available_balance) values (?, ?)";
-				
+
 				PreparedStatement ps = conn.prepareStatement(sql);
-				
+
 				ps.setString(1, newAccount.getAccountId());
 				ps.setDouble(2, newAccount.getBalance());
-				
+
 				int rowsInserted = ps.executeUpdate();
-				
-				if(rowsInserted != 0) {
+
+				if (rowsInserted != 0) {
 					return newAccount;
 				}
 			}
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
-		
+
 	}
 
 	@Override
@@ -83,25 +108,25 @@ public class AccountDAO implements CrudDAO<Account> {
 
 	@Override
 	public boolean delete(String id) {
-		
-		try(Connection conn = ConnectionFactory.getInstance().getConnection()) {
-			
+
+		try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+
 			String sql = "delete from accounts where account_id = ?";
-			
+
 			PreparedStatement ps = conn.prepareStatement(sql);
-			
+
 			ps.setString(1, id);
-			
+
 			int rowsDeleted = ps.executeUpdate();
-			
-			if(rowsDeleted != 0) {
+
+			if (rowsDeleted != 0) {
 				return true;
 			}
-			
-		} catch(SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
 

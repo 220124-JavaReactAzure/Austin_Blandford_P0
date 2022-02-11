@@ -64,11 +64,15 @@ public class Register extends Menu {
 		}
 		
 		try {
-			customerService.registerNewCustomer(newCustomer);
+			if(customerService.registerNewCustomer(newCustomer)) {
+				router.transfer("/login");
+			} else {
+				router.transfer("/welcome");
+			}
 		} catch(InvalidRequestException e) {
 			System.out.println("You have provided invalid data. Please try again.");
 			
-			router.transfer("/welcome");
+			router.transfer("/register");
 		}
 	}
 	

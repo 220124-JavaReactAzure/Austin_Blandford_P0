@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import com.revature.bank_app.daos.CustomerDAO;
 import com.revature.bank_app.exceptions.AuthenticationException;
 import com.revature.bank_app.exceptions.InvalidRequestException;
-import com.revature.bank_app.exceptions.ResourcePersistenceException;
 
 public class CustomerService {
 	
@@ -37,7 +36,8 @@ public class CustomerService {
 		boolean emailAvailable = customerDao.findByEmail(newCustomer.getEmail()) == null;
 		
 		if(!emailAvailable) {
-			throw new ResourcePersistenceException("The provided email already exists in our database.\n");
+			System.out.println("The provided email already exists in our database. Please enter a different email.\n");
+			return false;
 		}
 		
 		Account newAccount = accountService.createNewAccount();
